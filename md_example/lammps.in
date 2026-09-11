@@ -1,0 +1,95 @@
+## LAMMPS input file for methane in kerogen-coasne-id01
+
+## Units
+units              real
+
+## Boundary conditions
+boundary           p p p
+box tilt           large
+
+## Required atom parameters
+atom_style         atomic
+
+## neighbour list
+neigh_modify       delay 2 every 1
+
+## Potential Style (must be defined before pair_coeff in data file)
+pair_style         lj/cut 12.0
+
+## Minimized file
+read_data          75X_0DVB_4_minimized.data     
+#read_restart      restart1.rst
+
+
+## mixing rules, pair coeffs are defined in data file
+pair_modify        tail no 
+pair_modify        mix arithmetic
+
+
+## Define groups
+group              methane type 6
+group              material  type 7:12 
+
+
+## Exclude material-material interactions
+neigh_modify       exclude group material material
+neigh_modify       exclude group methane methane
+
+## Generate velocity 
+velocity           methane create 298.0 1234567 dist gaussian
+velocity           material set 0.0 0.0 0.0
+
+
+## Fix the PIM
+fix freeze material setforce 0.0 0.0 0.0
+
+
+## compute temperature using correct degree of freedom
+compute            ctemp methane temp
+compute_modify     ctemp extra/dof 0 
+
+## Dump pressure to output file
+thermo_style       custom step temp evdwl ke pe etotal
+thermo_modify      temp ctemp
+thermo             5000
+
+## -------- NVT simulation
+## Equilibrium
+fix               fnvt methane nvt temp 298.0 298.0 100
+fix_modify        fnvt temp ctemp
+
+## write restart files
+restart           10000 restart1.rst restart2.rst
+
+## dump dcd
+dump              movie methane dcd 50000 traj_methane_equilibrium.dcd
+
+## time step
+timestep          1.0
+
+## 5ns
+run               5000000   
+
+write_data        75X_0DVB_4_equilibrated.data
+
+## trun off dump
+undump movie
+
+## -------- Production
+##reset_timestep    0
+
+
+compute           msd_methane methane msd
+fix               msdout methane ave/time 100 10 1000 c_msd_methane[4] file msd.dat
+
+
+## dump unwrapped position
+dump              pos methane custom 1000 methane_displace.dump id type xu yu zu x y z
+
+## 100 ns
+run               100000000
+
+write_data        75X_0DVB_4_finished.data 
+
+
+

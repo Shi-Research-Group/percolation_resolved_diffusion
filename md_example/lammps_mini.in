@@ -1,0 +1,45 @@
+## LAMMPS input file of energy minimization for 1000 methane in Kerogen-Coasne-id01 without blocking spheres
+
+## Units
+units              real
+
+## Boundary conditions
+boundary           p p p
+box tilt           large
+
+## Required atom parameters
+atom_style         atomic
+
+## neighbour list
+neigh_modify       delay 2 every 1
+
+## Potential Style (must be defined before pair_coeff in data file)
+pair_style         lj/cut 12.0
+
+## Initial configuration file
+read_data          75X_0DVB_4.data       
+
+## mixing rules, pair coeffs are defined in data file
+pair_modify        tail no 
+pair_modify        mix arithmetic
+
+## Define groups
+group              methane type 6
+group              material  type 7:12 
+
+## Exclude material-material interactions
+neigh_modify       exclude group material material
+neigh_modify       exclude group methane methane
+
+## Fix the Material
+fix freeze material setforce 0.0 0.0 0.0
+
+# ---------------- Minimization ----------------
+min_style       cg
+minimize        1.0e-4 1.0e-6 2000 20000
+
+# ---------------- Output minimized coordinates ----------------
+write_data      75X_0DVB_4_minimized.data
+
+
+
