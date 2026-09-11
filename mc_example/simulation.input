@@ -1,0 +1,38 @@
+SimulationType                  MonteCarlo
+NumberOfCycles                  100
+NumberOfInitializationCycles    0
+RandomSeed                      1
+
+PrintEvery                      10
+PrintPropertiesEvery            10
+WriteBinaryRestartFileEvery     10
+
+Movies                          yes
+LMPData                         yes
+WriteMoviesEvery                20
+RestartFile                     no
+ContinueAfterCrash              no
+RemoveAtomNumberCodeFromLabel   no
+
+Forcefield                      local
+CutOffVDW                       12
+
+Framework                       0
+FrameworkName 75X_0DVB_4
+UnitCells 1 1 1
+
+ExternalTemperature             298.0
+
+
+Component 0 MoleculeName              methane        
+            MoleculeDefinition        local
+            BlockPockets              yes
+            InvertBlockPockets        yes
+            BlockPocketsFilename      75X_0DVB_4
+            TranslationProbability    1.0
+            ReinsertionProbability    1.0
+            SwapProbability           0.0
+            RotationProbability       0.0
+            CreateNumberOfMolecules   50
+
+
