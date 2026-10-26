@@ -7,4 +7,6 @@ Code and data for percolation-resolved pore characterization and methane diffusi
 - `blocking_sphere_generation/` — Generates blocking spheres for accessible pore regions.
 - `mc_example/` — Example Monte Carlo (MC) setup using `InvertBlockPockets` to initialize methane within the percolating pore network.
 - `md_example/` — Example molecular dynamics simulation for methane diffusion.
-- `property_calculation/` — Scripts for calculating structural and topology-related properties using Mofography; some functions were revised and shown in "winding_percolation.py". 
+- `property_calculation/` — Scripts for calculating structural and topology-related properties using Mofography.
+
+Reference: Zheng, C.; Gopalan, A.; Shi, K. Revisiting Percolation and Molecular Diffusion in Disordered Pore Networks (https://doi.org/10.26434/chemrxiv.15011012/v1).
